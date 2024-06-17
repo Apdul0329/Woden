@@ -21,7 +21,7 @@ class Storage(UUIDBaseModel):
         null=True, blank=True,
         max_length=128
     )
-    host = models.GenericIPAddressField(
+    host = models.CharField(
         verbose_name=_('host'),
         help_text=_('Enter host.')
     )
