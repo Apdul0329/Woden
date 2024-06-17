@@ -1,0 +1,84 @@
+syntax = "proto3";
+
+package schemas;
+
+service DataSourceManageService {
+    rpc GetSchemas (SchemaRequest) returns (SchemaResponse);
+    rpc GetTables (TableRequest) returns (TableResponse);
+    rpc GetColumns (ColumnRequest) returns (ColumnResponse);
+    rpc GetViews (ViewRequest) returns (ViewResponse);
+    rpc DoMigration (MigrationRequest) returns (MigrationResponse);
+}
+
+message SchemaRequest {
+    string id = 1;
+    string vendor = 2;
+    string uri = 3;
+}
+
+message Schema {
+    optional string id = 1;
+    string schema = 2;
+}
+
+message SchemaResponse {
+    bool success = 1;
+    repeated Schema schemas = 2;
+}
+
+message TableRequest {
+    string vendor = 1;
+    string uri = 2;
+    repeated Schema schemas = 3;
+}
+
+message Table {
+    optional string id = 1;
+    string schema = 2;
+    string table = 3;
+}
+
+message TableResponse {
+    bool success = 1;
+    repeated Table tables = 2;
+}
+
+message ColumnRequest {
+    string vendor = 1;
+    string uri = 2;
+    repeated Table tables = 3;
+}
+
+message Column {
+    string column = 1;
+}
+
+message ColumnResponse {
+    bool success = 1;
+    repeated Column columns = 2;
+}
+
+message ViewRequest {
+    string vendor = 1;
+    string uri = 2;
+    string schema = 3;
+    string table = 4;
+    repeated string columns = 5;
+    int32 row = 6;
+}
+
+message ViewResponse {
+    bool success = 1;
+    bytes records = 2;
+}
+
+message MigrationRequest {
+    string source_uri = 1;
+    string destination_uri = 2;
+    string table = 3;
+}
+
+message MigrationResponse {
+    bool success = 1;
+    string message = 2;
+}
