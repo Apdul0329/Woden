@@ -1,19 +1,18 @@
 FROM python:3.11-slim
 
-# Set the working directory
 WORKDIR /app
 
-# Copy the requirements file into the container
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends gcc g++ libc-dev pkg-config libmariadb-dev libpq-dev && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 COPY requirements.txt .
 
-# Install the dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application code into the container
 COPY . .
 
-# Expose the port that the app runs on
 EXPOSE 8000
 
-# Run the application
 CMD ["gunicorn", "storage_service.wsgi:application", "--bind", "0.0.0.0:8000"]
